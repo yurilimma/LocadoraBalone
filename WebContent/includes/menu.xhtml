@@ -1,0 +1,22 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+		xmlns:f="http://xmlns.jcp.org/jsf/html"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+		
+		<h:form>
+			<p:menu style="width: auto;">	
+				<p:submenu label="Autenticação">
+					<p:menuitem value="Login" icon="ui-icon ui-icon-arrowreturnthick-1-e"
+					onclick="window.location.href='/LocadoraBalone/autenticacao/Login.jsf'"/>
+					<p:menuitem value="Cadastrar" icon="ui-icon-plus"
+					onclick="window.location.href='/LocadoraBalone/autenticacao/Cadastrar.jsf'" actionListener="#{usuarioBean.prepararNovo}"/>
+					
+				</p:submenu>
+				
+			</p:menu>
+		
+		</h:form>
+		
+</ui:composition>

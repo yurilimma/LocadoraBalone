@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+		template="/templates/template.xhtml">
+		
+
+	<ui:define name="cabecalho">
+		<ui:include src="/includes/cabecalho.xhtml"/>
+	</ui:define>
+	<ui:define name="menulateral">
+		<ui:include src="/includes/menu.xhtml"/>
+	</ui:define>
+	<ui:define name="conteudo">
+		<h2> Editar Post</h2>
+		<hr></hr>
+		<br></br>
+		<p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true"/> 
+		<h:panelGrid id="pgPrincipal" columns="2">
+   			<h:form id="fEditar">
+   			<h:panelGrid id="pgEditar" columns="2">
+	   			<p:outputLabel value= "Titulo Post: " />
+	   			<p:inputText id="tituloPost" value="#{postBean.post.tituloPost}"	/>
+	   				
+				<p:outputLabel value= "Conteúdo Post: " />
+	 			<p:inputTextarea rows="10" cols="50" id="conteudoPost" value="#{postBean.post.texto}"	/>
+   			</h:panelGrid>
+   			<h:panelGrid columns="2">
+   				<p:commandButton value="Confirmar" actionListener="#{usuarioBean.editarPost(postBean.post)}"/>
+   			</h:panelGrid>
+   			</h:form>
+   			<h:form id="fTabela">
+				<p:dataTable id="tblComentarios" var="comentario" value="#{postBean.comentarios}" rows="10"
+					paginator="true" emptyMessage="Nenhum registro encontrado!"
+					paginatorTempate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLink} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate = "5,10,15">
+				<f:facet name="header">
+       			 Lista de Comentários
+    			</f:facet>
+				<p:column headerText="Autor Comentário" filterBy="#{comentario.autor}" filterMatchMode="contains">
+		        	<h:outputText value="#{comentario.autor}" />
+		    	</p:column>
+		    	<p:column headerText="Descrição Comentário" filterBy="#{comentario.descricao}" filterMatchMode="contains">
+		       		<h:outputText value="#{comentario.descricao}" />
+		   		</p:column>
+		    	<p:column headerText="Opções">
+		    	<center>
+		    		<p:commandButton icon="ui-icon-comment" actionListener="#{postBean.PrepararLerComentario}" oncomplete="PF('dlgLerComentario').show()" update=":fLerComentario:pgLerComentario"/>
+		        	<p:commandButton icon="ui-icon-trash" actionListener="#{postBean.PrepararExcluirComentario}" oncomplete="PF('dlgExcluirComentario').show()" update=":fExcluir:pgExcluir" />
+		    	</center>
+		    	</p:column>
+				<f:facet name="footer">
+					<p:commandButton value="Adicionar Comentário" actionListener="#{postBean.PrepararNovoComentario}" oncomplete="PF('dlgNovoComentario').show()" update="fCadastrar:pgCadastrar"/>
+				</f:facet>
+				</p:dataTable>
+			</h:form>
+   			</h:panelGrid>
+   		<p:dialog header="Adicionar Comentário" widgetVar="dlgNovoComentario" modal="true" height="200" appendTo="@(body)" draggable="false" resizable="false" closeable="true">
+   		<h:form id="fCadastrar">
+   			<h:panelGrid id="pgCadastrar" columns="2">
+   				<p:outputLabel value= "Autor Comentário: " />
+   				<p:inputText id="autor" value="#{postBean.comentario.autor}"	/>
+   				<p:outputLabel value= "Descrição Comentário: " />
+   				<p:inputTextarea rows="5" cols="25" id="descricao" value="#{postBean.comentario.descricao}"	/>
+   			</h:panelGrid>
+   			<h:panelGrid columns="2">
+   				<p:commandButton value="Adicionar" actionListener="#{postBean.CadastrarNovoComentario(postBean.post,postBean.comentario)}" oncomplete="PF('dlgNovoComentario).hide()" update="fTabela:tblComentarios"/>
+   			</h:panelGrid>
+   		</h:form>
+	</p:dialog> 
+		
+	<p:dialog header="Excluir Comentário" widgetVar="dlgExcluirComentario" modal="true" height="200" width="400" appendTo="@(body)" draggable="false" resizable="false" closeable="true">
+   		<h:form id="fExcluir">
+   			<h:panelGrid id="pgExcluir" columns="2">
+   				<p:outputLabel value= "Autor Comentário: " />
+   				<p:outputLabel id= "autor" value='#{postBean.comentario.autor}'/>
+   				<p:outputLabel value= "Descrição Comentário: " />
+   				<p:outputLabel id= "descricao" value='#{postBean.comentario.descricao}'/>
+   				
+   			</h:panelGrid>
+   			<h:panelGrid columns="2">
+   				<p:commandButton value="Excluir" actionListener="#{postBean.ExcluirComentario}" oncomplete="PF('dlgExcluirComentario).hide()" update="fTabela:tblComentarios"/>
+   			</h:panelGrid>
+   		</h:form>
+	</p:dialog>
+	<p:dialog header="Visualizar Comentário" widgetVar="dlgLerComentario" modal="true" height="200" width="400" appendTo="@(body)" draggable="false" resizable="false" closeable="true">
+   		<h:form id="fLerComentario">
+   			<h:panelGrid id="pgLerComentario" columns="2">
+   				<p:outputLabel value= "Autor Comentário: " />
+   				<p:outputLabel id= "autor" value='#{postBean.comentario.autor}'/>
+   				<p:outputLabel value= "Descrição Comentário: " />
+   				<p:outputLabel id= "descricao" value='#{postBean.comentario.descricao}'/>
+   			</h:panelGrid>
+   		</h:form>
+	</p:dialog>
+	
+	</ui:define>
+	<ui:define name="rodape">
+		<ui:include src="/includes/rodape.xhtml"/>
+	</ui:define>
+	
+</ui:composition>

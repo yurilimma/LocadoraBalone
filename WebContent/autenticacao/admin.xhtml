@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+		template="/templates/template.xhtml">
+		
+
+	<ui:define name="cabecalho">
+		<ui:include src="/includes/cabecalho.xhtml"/>
+	</ui:define>
+	<ui:define name="menulateral">
+		<ui:include src="/includes/menu.xhtml"/>
+	</ui:define>
+	<ui:define name="conteudo">
+		<h3>Bem vindo #{usuarioBean.usuario.nome}</h3>
+		<hr></hr>
+		<br></br>
+	<h:panelGrid id="pgPrincipal" cellpadding="5" columns="3">
+		<p:graphicImage height="260" width="190" url="/resources/imagens/melissandre.jpg" />
+		<h:form id="fTabela">
+			<p:dataTable id="tblPosts" var="post" value="#{usuarioBean.posts}" rows="10"
+				paginator="true" emptyMessage="Nenhum registro encontrado!"
+				paginatorTempate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLink} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate = "5,10,15">
+			<f:facet name="header">
+       			 Lista de Posts
+    		</f:facet>
+			<p:column headerText="Id" filterBy="#{post.idPost}" filterMatchMode="contains">
+	        	<h:outputText value="#{post.idPost}" />
+	    	</p:column>
+	    	<p:column headerText="Titulo Post" filterBy="#{post.tituloPost}" filterMatchMode="contains">
+	       		<h:outputText value="#{post.tituloPost}" />
+	   		</p:column>
+	    	<p:column headerText="Opções">
+	    	<center>
+	        	<p:commandButton icon="ui-icon-pencil" action="#{postBean.prepararEditar(post.idPost,post.tituloPost,post.texto)}" />
+	        	<p:commandButton icon="ui-icon-trash" actionListener="#{usuarioBean.prepararExcluirPost}" oncomplete="PF('dlgExcluirPost').show()" update=":fExcluir:pgExcluir" />
+	    	</center>
+	    	</p:column>
+	    	
+			<f:facet name="footer">
+				<p:commandButton action="#{usuarioBean.logout}" value="Logout" />
+				<p:commandButton value="Adicionar Post" actionListener="#{usuarioBean.prepararNovoPost}" oncomplete="PF('dlgNovoPost').show()" update="fCadastrar:pgCadastrar"/>
+			</f:facet>
+			</p:dataTable>
+		</h:form>
+		
+		<p:graphicImage height="260" width="190" url="/resources/imagens/nightsking.jpg" />
+		
+	</h:panelGrid>	
+	
+	<!-- Modal, fora do contexto do formulario -->
+	<p:dialog header="Adicionar Post" widgetVar="dlgNovoPost" modal="true" height="300" appendTo="@(body)" draggable="false" resizable="false" closeable="true">
+   		<h:form id="fCadastrar">
+   			<h:panelGrid id="pgCadastrar" columns="2">
+   				<p:outputLabel value= "Titulo Post: " />
+   				<p:inputText id="tituloPost" value="#{usuarioBean.post.tituloPost}"	/>
+   				<p:outputLabel value= "Conteúdo Post: " />
+   				<p:inputTextarea rows="10" cols="50" id="conteudoPost" value="#{usuarioBean.post.texto}"	/>
+   			</h:panelGrid>
+   			<h:panelGrid columns="2">
+   				<p:commandButton value="Adicionar" actionListener="#{usuarioBean.cadastrarNovoPost}" oncomplete="PF('dlgNovoPost).hide()" update="fTabela:tblPosts"/>
+   			</h:panelGrid>
+   		</h:form>
+	</p:dialog> 
+		
+	<p:dialog header="Excluir Post" widgetVar="dlgExcluirPost" modal="true" height="150" width="300" appendTo="@(body)" draggable="false" resizable="false" closeable="true">
+   		<h:form id="fExcluir">
+   			<h:panelGrid id="pgExcluir" columns="2">
+   				<p:outputLabel value= "Titulo Post: " />
+   				<p:outputLabel id= "tituloPost" value='#{usuarioBean.post.tituloPost}'/>
+   				<p:outputLabel value= "Conteúdo Post: " />
+   				<p:outputLabel id= "conteudoPost" value='#{usuarioBean.post.texto}'/>
+   				
+   			</h:panelGrid>
+   			<h:panelGrid columns="2">
+   				<p:commandButton value="Excluir" actionListener="#{usuarioBean.excluirPost}" oncomplete="PF('dlgExcluirPost).hide()" update="fTabela:tblPosts"/>
+   			</h:panelGrid>
+   		</h:form>
+	</p:dialog>
+	
+	</ui:define>
+	<ui:define name="rodape">
+		<ui:include src="/includes/rodape.xhtml"/>
+	</ui:define>
+	
+</ui:composition>

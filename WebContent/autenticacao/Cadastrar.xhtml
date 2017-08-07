@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+		template="/templates/template.xhtml">
+
+	<ui:define name="cabecalho">
+		<ui:include src="/includes/cabecalho.xhtml"/>
+	</ui:define>
+	<ui:define name="menulateral">
+		<ui:include src="/includes/menu.xhtml"/>
+	</ui:define>
+	<ui:define name="conteudo">
+		<h2> Cadastrar Usuário</h2>
+		<hr></hr>
+		<b>Você está a um passo de entrar no universo de Westeros, cadastra-se preenchendo o formulário abaixo.</b>
+		<br></br>
+		<h:form id="fCadastro">
+		<br></br>
+			<center>
+			<p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true"/> 
+	    		<h:panelGrid id="pgPrincipal" cellpadding="5" columns="3">	
+	    			<p:graphicImage height="230" width="140" url="/resources/imagens/funkocersei.png" />
+	    			<h:panelGrid id="pgCadastro" cellpadding="5" columns="2">
+	    				<p:outputLabel value= "Usuário: " />
+	    				<p:inputText id="usuario" type="email" value="#{usuarioBean.usuario.nome}"	/>
+	    				<p:outputLabel value= "Senha: " />
+	    				<p:password id="senha1" match="senha2" required="true" value="#{usuarioBean.usuario.senha}"	/>
+	    				<p:outputLabel value= "Repita a Senha: " />
+	    				<p:password id="senha2" value="#{usuarioBean.usuario.senha}"	/>
+	    				<p:outputLabel value= "Idade: " />
+	    				<p:inputText id="idade"  type="number" style="width:160px" value="#{usuarioBean.usuario.idade}"	/>
+	    				<p:outputLabel value= "Telefone: " />
+	    				<p:inputText id="telefone" value="#{usuarioBean.usuario.telefone}"	/>
+	    				<p:outputLabel value= "Casa: " />
+	    				<p:selectOneMenu id="console" value="#{usuarioBean.usuario.casa}" style="width:145px">
+				            <f:selectItem itemLabel="Selecione uma..." itemValue="Nao especificado" />
+				            <f:selectItem itemLabel="Tyrell" itemValue="Tyrell" />
+				            <f:selectItem itemLabel="Lannister" itemValue="Lannister" />
+				            <f:selectItem itemLabel="Stark" itemValue="Stark" />
+				            <f:selectItem itemLabel="Greyjoy" itemValue="Greyjoy" />
+				            <f:selectItem itemLabel="Baratheon" itemValue="Baratheon" />
+				            <f:selectItem itemLabel="Targaryen" itemValue="Targaryen" />
+				            <f:selectItem itemLabel="Arryn" itemValue="Arryn" />
+				            <f:selectItem itemLabel="Tully" itemValue="Tully" />
+				            <f:selectItem itemLabel="Martell" itemValue="Martell" />
+	        			</p:selectOneMenu>
+	    			</h:panelGrid>
+	    			<p:graphicImage height="220" width="160" url="/resources/imagens/funkojon.jpg" />
+	    		</h:panelGrid>
+    			<h:panelGrid columns="2">
+    				<p:commandButton value="Cadastrar" actionListener="#{usuarioBean.cadastrarNovo}" 
+    				update="growl"/>
+    			</h:panelGrid>
+    		</center>	
+    	</h:form>
+    	
+	</ui:define>
+	<ui:define name="rodape">
+		<ui:include src="/includes/rodape.xhtml"/>
+	</ui:define>
+	
+</ui:composition>
